@@ -40,6 +40,7 @@ end
 
 ---@class TriptychConfigOptions
 ---@field dirs_first boolean
+---@field display_directory_in_title boolean
 ---@field collapse_dirs boolean
 ---@field show_hidden boolean
 ---@field line_numbers TriptychConfigLineNumbers
@@ -123,6 +124,7 @@ local function default_config()
     extension_mappings = {},
     options = {
       dirs_first = true,
+      display_directory_in_title  = false,
       collapse_dirs = true,
       show_hidden = false,
       line_numbers = {

@@ -226,12 +226,20 @@ local function line_number_of_path(path, path_details)
   return num
 end
 
----Currently just return "(cwd)" if the path == cwd
+---return "(cwd)" if the path == cwd
+---or return the relative dir if show_dir == true
 ---@param path string
+---@param show_dir boolean
 ---@return string?
-local function get_title_postfix(path)
-  if path == vim.fn.getcwd() then
+local function get_title_postfix(path, show_dir)
+  show_dir = show_dir or false
+  local cwd  = vim.fn.getcwd()
+  if path  ==  cwd then
     return '(cwd)'
+  end
+  if (show_dir) then
+    local out = path:gsub(cwd,"")
+    return out
   end
 end
 
@@ -291,7 +299,9 @@ function M.set_primary_and_parent_window_targets(State, target_dir, maybe_cursor
     when_false = '',
   })
 
-  float.win_set_title(parent_win, parent_title, icon, 'Directory', get_title_postfix(parent_path))
+  local should_show_dir_in_parent_view = config_options.display_directory_in_title 
+
+  float.win_set_title(parent_win, parent_title, icon, 'Directory', get_title_postfix(parent_path, should_show_dir_in_parent_view ))
   float.win_set_title(focused_win, focused_title, icon, 'Directory', get_title_postfix(target_dir))
 
   State.windows = {
